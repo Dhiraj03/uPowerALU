@@ -4,7 +4,7 @@ module read_registers(
     input [5:0] opcode, // RS, RA => Source registers ; RT => Destintion register
     input [63:0] WriteData,  // Data to be written to the register
     input  RegRead, RegWrite// RegWrite and RegRead are input signals to indicate whether the operation is reading/writing       
-)
+);
 reg [63:0] registers [31:0]; // The set of 32 registers (32-bit)
 
 initial
@@ -21,19 +21,19 @@ always @(WriteData)
       */  
       if(opcode == 6'd34)
        begin
-           registers[rd] = {56{1'b0}, WriteData[7:0]};
+           registers[rd] = {{56{1'b0}}, WriteData[7:0]};
        end
       if(opcode == 6'd40)
        begin
-           registers[rd] = {48{1'b0}, WriteData[15:0]};
+           registers[rd] = {{48{1'b0}}, WriteData[15:0]};
        end
       if (opcode == 6'd42)
        begin
-           registers[rd] = {48{WriteData[31]}, WriteData[31:0]};
+           registers[rd] = {{48{WriteData[31]}}, WriteData[31:0]};
        end
       if (opcode == 6'd32)
        begin
-           registers[rd] = {32{1'b0}, WriteData[31:0]};
+           registers[rd] = {{32{1'b0}}, WriteData[31:0]};
        end
       if (opcode == 6'd48)
        begin

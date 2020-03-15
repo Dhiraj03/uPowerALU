@@ -4,7 +4,7 @@ components of the instruction to suitable variables depending on the format
 
 module InstructionParse (
     output wire [5:0] opcode,
-    output reg [4:0] rs,rt,rd,bo,bi
+    output reg [4:0] rs,rt,rd,bo,bi,
     output reg [8:0] xoxo,
     output reg [9:0] xox,
     output reg rc,aa,lk,oe,
@@ -12,14 +12,15 @@ module InstructionParse (
     output reg [15:0] si,
     output reg [23:0] li,
     output reg [1:0] xods,
-    input [31:0] instructionRev,
+    input [31:0] instructionRev
 );
 reg [0:31] instruction;
-assign instruction = instructionRev;
-assign opcode = instruction[31:26];
+assign opcode = instructionRev[31:26];
 
 always @(instruction)
  begin
+    assign instruction = instructionRev;
+    
      if(opcode == 6'd31 & (instruction[22:30] == 9'd266 | instruction[22:30] == 9'd40) )
       begin
           xoxo = instruction[22:30];

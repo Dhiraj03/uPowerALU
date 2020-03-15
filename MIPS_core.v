@@ -40,11 +40,11 @@ wire [63:0] write_data, rs_content, rt_content, memory_read_data;
 //Instantiating all necessary modules
 read_instructions InstructionMemory(instruction, PC);
 
-InstructionParse Parse(opcode, rs, rt, rd, bo, bi,xoxo,xox,rc,aa,lk,oe,si,li,xods,instruction);
+InstructionParse Parse(opcode, rs, rt, rd, bo, bi,xoxo,xox,rc,aa,lk,oe,bd,ds,si,li,xods,instruction);
 
 control_unit Signals(RegRead, RegWrite, MemRead, MemWrite, Branch, opcode, xoxo, xox, xods);
 
-ALU32bit ALU(write_data, Branch, rs, rt, bo, bi, opcode, xoxo, xox, rc, ds, si, xods);
+ALU32bit ALU(write_data, Branch, rs_content, rt_content, rs_content,rt_content, opcode, xoxo, xox, rc,aa, ds, si, xods);
 
 read_mem MainMemory(memory_read_data, write_data, rs_content, opcode, MemRead, MemWrite);
 
@@ -55,7 +55,7 @@ read_registers Registers(rs_content, rt_content, rs,rt,rd, opcode, write_data, R
 always @(posedge clock) 
  begin
      if(opcode == 6'd18)
-       PC = {8{1'b0},li};
+       PC = {{8{1'b0}},li};
      else if(write_data == 0 & Branch == 1)
        PC = PC + 1 + $signed(bd);
      else 

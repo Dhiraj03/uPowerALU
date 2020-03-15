@@ -1,10 +1,11 @@
 // MIPS test bench - To drive and simulate the entire MIPS ALU 
+`include "MIPS_core.v"
 module mips_testbench();
 
 reg clock;
 wire result;
 
-mips_core(clock);
+mips_core lolpliswork(clock);
 initial clock = 0;
 
 initial 

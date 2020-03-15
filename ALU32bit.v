@@ -9,7 +9,7 @@ module ALU32bit(
   input [5:0] opcode,
   input [8:0] xoxo, //to identify whether ADD or SUB
   input [9:0] xox,  // ""
-  input rc, //
+  input rc,aa, //
   input [13:0] ds, //bd is used for branch
   input [15:0] si,
   //input [23:0] li,
@@ -18,17 +18,14 @@ module ALU32bit(
 
 integer i;
 reg signed [31:0] temp, signed_rs, signed_rt; 
-reg [31:0] signExtend, zeroExtend, signExtendSI, sign16Extend, signExtendDS;
-
-signExtendSI = {48{si[15]},si};
-sign16ExtendSI = {si,16{si[15]}};
-signExtendDS = {50{ds[13]}, ds};
-
+reg [31:0] signExtend, zeroExtend, signExtendSI, sign16ExtendSI, signExtendDS;
 always @(rs,rt,bo,bi,xox,xoxo,xods,rc,ds,si)
   begin
       signed_rs = rs;
       signed_rt = rt;
-
+      signExtendSI = {{48{si[15]}},si};
+       sign16ExtendSI = {si,{16{si[15]}}};
+       signExtendDS = {{50{ds[13]}}, ds};
       if(opcode == 6'd31 & xoxo!= 0)
         begin
             case(xoxo) 
@@ -48,7 +45,7 @@ always @(rs,rt,bo,bi,xox,xoxo,xods,rc,ds,si)
                ALU_result = rs & rt;
               
               10'd986: //EXTSW
-               ALU_result = {32{rs[31]}, rs[31:0]};
+               ALU_result = {{32{rs[31]}}, rs[31:0]};
               
               10'd476: //NAND
                ALU_result = ~(rs & rt);
@@ -101,18 +98,24 @@ else if(opcode == 6'd18)
 else if(opcode == 6'd19)
     begin
         if (aa == 1'b0) // BEQ
+          begin
           ALU_result = signed_rs - signed_rt;
           if(ALU_result == 0)
             Branch = 1;
           else  
             Branch = 0;
+          end
         else 
+          begin
           ALU_result = signed_rs - signed_rt;
           if(ALU_result == 0)
+            begin
             Branch = 0;
             ALU_result = 0;  // check later
+            end
           else 
             Branch = 1;
+          end
     end
 else if(opcode == 6'd58)
    ALU_result = signed_rs + signExtendDS;
