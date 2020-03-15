@@ -5,7 +5,7 @@ module mips_testbench();
 reg clock;
 wire result;
 
-mips_core lolpliswork(clock);
+mips_core Datapath(clock);
 initial clock = 0;
 
 initial 

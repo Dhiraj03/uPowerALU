@@ -12,58 +12,57 @@ module InstructionParse (
     output reg [15:0] si,
     output reg [23:0] li,
     output reg [1:0] xods,
-    input [31:0] instructionRev
+    input [31:0] instruction
 );
-reg [0:31] instruction;
-assign opcode = instructionRev[31:26];
+assign opcode = instruction[31:26];
 
 always @(instruction)
  begin
-    assign instruction = instructionRev;
     
-     if(opcode == 6'd31 & (instruction[22:30] == 9'd266 | instruction[22:30] == 9'd40) )
+    
+     if(opcode == 6'd31 & (instruction[9:1] == 9'd266 | instruction[9:1] == 9'd40) )
       begin
-          xoxo = instruction[22:30];
-          rd = instruction[6:10];
-          rs = instruction[11:15];
-          rt = instruction[16:20];
-          oe = instruction[21];
-          rc = instruction[31];
+          rd = instruction[25:21];
+          rs = instruction[20:16];
+          rt = instruction[15:11];
+          xoxo = instruction[9:1];
+          oe = instruction[10];
+          rc = instruction[0];
       end
       else if(opcode == 6'd31)
       begin
-         xox = instruction[21:30];
-         rc = instruction[31];
-         rd = instruction[6:10];
-         rs = instruction[11:15];
-         rt = instruction[16:20];
+         xox = instruction[10:1];
+         rc = instruction[0];
+         rd = instruction[25:21];
+         rs = instruction[20:16];
+         rt = instruction[15:11];
       end
       else if(opcode ==  6'd14 | opcode == 6'd15 | opcode == 6'd28 |opcode == 6'd24 |opcode == 6'd26 |opcode == 6'd32 |opcode == 6'd36 |opcode == 6'd37 |opcode == 6'd40 | opcode == 6'd42 |opcode == 6'd44 |opcode == 6'd34 |opcode == 6'd38 )
        begin
-           rd = instruction[6:10];
-           rs = instruction[11:15];
-           si = instruction[16:31];
-       end   // if bclr to be used, add it
+           rd = instruction[25:21];
+           rs = instruction[20:16];
+           si = instruction[15:0];
+       end  
       else if(opcode == 6'd19)
        begin
-         bo = instruction[6:10];
-         bi = instruction[11:15];
-         aa = instruction[30];
-         lk = instruction[31];
-         bd = instruction[16:29];
+         bo = instruction[25:21];
+         bi = instruction[20:16];
+         aa = instruction[1];
+         lk = instruction[0];
+         bd = instruction[15:2];
        end
       else if(opcode == 6'd18)
       begin
-          li = instruction[6:29];
-          aa = instruction[30];
-          lk = instruction[31];
+          li = instruction[25:2];
+          aa = instruction[1];
+          lk = instruction[0];
       end
       else 
        begin
-        rd = instruction[6:10];
-        rs = instruction[11:15];
-        ds = instruction[16:29];
-        xods = instruction[30:31];
+        rd = instruction[25:21];
+        rs = instruction[20:16];
+        ds = instruction[15:2];
+        xods = instruction[1:0];
       end
  end
 endmodule

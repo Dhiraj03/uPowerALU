@@ -15,10 +15,7 @@ initial
 always @(WriteData)
   begin
     if(RegWrite)
-      begin
-      /* RegDst = 0 => Write to RT
-         RegDst = 1 => Write to RD
-      */  
+      begin  
       if(opcode == 6'd34)
        begin
            registers[rd] = {{56{1'b0}}, WriteData[7:0]};
@@ -39,7 +36,7 @@ always @(WriteData)
        begin
            registers[rd] = WriteData;
        end
-      $writememb("registers.mem",registers);
+      $writememb("registers.mem",registers,31,0);
     end
  end
 

@@ -8,8 +8,8 @@ module ALU32bit(
   input [63:0] rs,rt,bo,bi, 
   input [5:0] opcode,
   input [8:0] xoxo, //to identify whether ADD or SUB
-  input [9:0] xox,  // ""
-  input rc,aa, //
+  input [9:0] xox,  
+  input rc,aa, 
   input [13:0] ds, //bd is used for branch
   input [15:0] si,
   //input [23:0] li,
@@ -128,7 +128,7 @@ end
 
 initial 
 begin
-    $monitor("Opcode : %6b, RS : %64b, RT : %64b, signExtendImm = %64b, signExtendDs = %64b Result : %64b\n",
+    $monitor("Opcode : %6b, RS : %b, RT : %b, signExtendImm = %b, signExtendDs = %b Result : %b\n",
     opcode, rs, rt, signExtendSI, signExtendDS,ALU_result);
 end
 
